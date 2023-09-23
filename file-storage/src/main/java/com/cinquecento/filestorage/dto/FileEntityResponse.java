@@ -1,4 +1,4 @@
-package com.cinquecento.filestorage.util.response;
+package com.cinquecento.filestorage.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class FileEntityResponse {
 
+    private Integer errorCode;
     private String message;
     private String date;
 

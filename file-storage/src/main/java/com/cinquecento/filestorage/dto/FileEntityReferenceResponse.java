@@ -1,4 +1,4 @@
-package com.cinquecento.filestorage.util.response;
+package com.cinquecento.filestorage.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
