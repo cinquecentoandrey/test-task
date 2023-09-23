@@ -1,31 +1,31 @@
 package com.cinquecento.filestorage.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FileEntityDTO {
+
+    private Long id;
 
     private String fileName;
 
-    @Lob
-    @Type(type="org.hibernate.type.BinaryType")
-    private byte[] data;
+    private String path;
 
     private String type;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date uploadedAt;
+    private LocalDateTime uploadedAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 }
