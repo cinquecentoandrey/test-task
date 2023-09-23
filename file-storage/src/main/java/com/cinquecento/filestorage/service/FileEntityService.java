@@ -1,5 +1,6 @@
 package com.cinquecento.filestorage.service;
 
+import com.cinquecento.filestorage.exception.FileEntityNotFoundException;
 import com.cinquecento.filestorage.model.FileEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface FileEntityService {
 
-    Long save(MultipartFile file) throws IOException;
+    FileEntity save(MultipartFile file) throws IOException;
 
     List<FileEntity> findAll();
 
@@ -16,7 +17,7 @@ public interface FileEntityService {
 
     boolean exist(Long id);
 
-    void update(Long id, MultipartFile file) throws IOException;
+    FileEntity update(Long id, MultipartFile file) throws IOException;
 
-    void delete(Long id);
+    void delete(Long id) throws FileEntityNotFoundException;
 }

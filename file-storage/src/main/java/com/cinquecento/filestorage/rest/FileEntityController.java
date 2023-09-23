@@ -1,12 +1,13 @@
 package com.cinquecento.filestorage.rest;
 
 import com.cinquecento.filestorage.dto.FileEntityDTO;
+import com.cinquecento.filestorage.exception.FileEntityNotDeletedException;
 import com.cinquecento.filestorage.mapper.FileEntityMapper;
 import com.cinquecento.filestorage.service.impl.FileEntityServiceImpl;
-import com.cinquecento.filestorage.util.exception.FileEntityNotFoundException;
-import com.cinquecento.filestorage.util.exception.FileEntityNotSavedException;
-import com.cinquecento.filestorage.util.exception.FileEntityNotUpdatedException;
-import com.cinquecento.filestorage.util.response.FileEntityReferenceResponse;
+import com.cinquecento.filestorage.exception.FileEntityNotFoundException;
+import com.cinquecento.filestorage.exception.FileEntityNotSavedException;
+import com.cinquecento.filestorage.exception.FileEntityNotUpdatedException;
+import com.cinquecento.filestorage.dto.FileEntityReferenceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,21 +34,18 @@ public class FileEntityController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<Map<String, Long>> upload(@RequestParam(name = "file") MultipartFile file) {
+    public ResponseEntity<FileEntityDTO> upload(@RequestParam(name = "file") MultipartFile file) {
 
-        Long id;
+        FileEntityDTO dto;
 
         try {
-            id = fileEntityService.save(file);
+            dto = fileEntityMapper.modelToDto(fileEntityService.save(file));
         } catch (IOException e) {
-            throw new FileEntityNotSavedException(e.getMessage());
+            throw new FileEntityNotSavedException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
 
-        Map<String, Long> response = new HashMap<>();
-        response.put("ID", id);
-
         return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+                .body(dto);
     }
 
     @GetMapping("/files")
@@ -77,44 +73,43 @@ public class FileEntityController {
     }
 
     @GetMapping("/files/{id}")
-    public ResponseEntity<byte[]> get(@PathVariable(name = "id") Long id) throws FileEntityNotFoundException {
+    public ResponseEntity<String> get(@PathVariable(name = "id") Long id) throws FileEntityNotFoundException {
         FileEntityDTO fileEntity = fileEntityMapper.modelToDto(fileEntityService.findById(id));
 
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileEntity.getFileName() +"\"")
-                .body(fileEntity.getData());
+                .body(fileEntity.getPath());
     }
 
     @PatchMapping("/files/{id}")
-    public ResponseEntity<Map<String, Long>> update(@PathVariable(name = "id") Long id,
+    public ResponseEntity<FileEntityDTO> update(@PathVariable(name = "id") Long id,
                                                     MultipartFile file) {
+        FileEntityDTO dto;
 
         if (!fileEntityService.exist(id)) {
-            throw new FileEntityNotFoundException("File with id = " + id + " not found.");
+            throw new FileEntityNotFoundException(HttpStatus.NOT_FOUND.value(), "File with id = " + id + " not found.");
         } else {
             try {
-                fileEntityService.update(id, file);
+                dto = fileEntityMapper.modelToDto(fileEntityService.update(id, file));
             } catch (IOException e) {
-                throw new FileEntityNotUpdatedException(e.getMessage());
+                throw new FileEntityNotUpdatedException(HttpStatus.BAD_REQUEST.value(), e.getMessage());
             }
         }
 
-        Map<String, Long> response = new HashMap<>();
-        response.put("ID", id);
-
         return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+                .body(dto);
     }
 
     @DeleteMapping("/files/{id}")
-    public ResponseEntity<Map<String, Long>> delete(@PathVariable(name = "id") Long id) {
-        fileEntityService.delete(id);
+    public ResponseEntity<HttpStatus> delete(@PathVariable(name = "id") Long id) {
 
-        Map<String, Long> response = new HashMap<>();
-        response.put("ID", id);
+        try {
+            fileEntityService.delete(id);
+        } catch (FileEntityNotFoundException e) {
+            throw new FileEntityNotDeletedException(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        }
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
