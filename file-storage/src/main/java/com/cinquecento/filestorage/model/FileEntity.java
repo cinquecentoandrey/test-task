@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "Files")
@@ -36,27 +34,32 @@ public class FileEntity {
     @Column(name = "filename")
     private String fileName;
 
-    @Lob
-    @Type(type="org.hibernate.type.BinaryType")
-    @Column(name = "data")
-    private byte[] data;
+    @Column(name = "path")
+    private String path;
 
     @Column(name = "type")
     private String type;
 
     @Column(name = "uploaded_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date uploadedAt;
+    private LocalDateTime uploadedAt;
+
+    @PrePersist
+    public void onUpload() {
+        this.uploadedAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 
     @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
-    public FileEntity(String fileName, byte[] data, String type, Date uploadedAt, Date updatedAt) {
+    @PostUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public FileEntity(String fileName, String path, String type) {
         this.fileName = fileName;
-        this.data = data;
+        this.path = path;
         this.type = type;
-        this.uploadedAt = uploadedAt;
-        this.updatedAt = updatedAt;
     }
 }
