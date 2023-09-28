@@ -20,4 +20,23 @@ spring:
           uri: lb://file-storage
           predicates:
             - Path=/file-storage/**
+          filters:
+            - AuthenticationFilter
 
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth-service/**
+      default-filters:
+        - AuthenticationFilter
+
+error-code:
+  auth: 401
+  invalid-token: 499
+
+jwt:
+  token:
+    secret: test-task
+    subject: details
+    expired: 120
+    issuer: me
