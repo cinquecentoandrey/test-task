@@ -1,4 +1,4 @@
-package com.cinquecento.filestorage.exception;
+package com.cinquecento.authservicestarter.exception;
 
 import lombok.Getter;
 import lombok.Setter;
