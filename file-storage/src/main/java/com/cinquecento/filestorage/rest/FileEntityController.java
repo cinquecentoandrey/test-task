@@ -1,13 +1,13 @@
 package com.cinquecento.filestorage.rest;
 
-import com.cinquecento.filestorage.dto.FileEntityDTO;
-import com.cinquecento.filestorage.exception.FileEntityNotDeletedException;
+import com.cinquecento.dto.FileEntityDTO;
+import com.cinquecento.dto.FileEntityReferenceResponse;
+import com.cinquecento.exception.FileEntityNotDeletedException;
+import com.cinquecento.exception.FileEntityNotFoundException;
+import com.cinquecento.exception.FileEntityNotSavedException;
+import com.cinquecento.exception.FileEntityNotUpdatedException;
 import com.cinquecento.filestorage.mapper.FileEntityMapper;
 import com.cinquecento.filestorage.service.impl.FileEntityServiceImpl;
-import com.cinquecento.filestorage.exception.FileEntityNotFoundException;
-import com.cinquecento.filestorage.exception.FileEntityNotSavedException;
-import com.cinquecento.filestorage.exception.FileEntityNotUpdatedException;
-import com.cinquecento.filestorage.dto.FileEntityReferenceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

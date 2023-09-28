@@ -1,9 +1,9 @@
 package com.cinquecento.filestorage.service.impl;
 
+import com.cinquecento.exception.FileEntityNotFoundException;
 import com.cinquecento.filestorage.model.FileEntity;
 import com.cinquecento.filestorage.repository.FileEntityRepository;
 import com.cinquecento.filestorage.service.FileEntityService;
-import com.cinquecento.filestorage.exception.FileEntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

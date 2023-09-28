@@ -1,6 +1,6 @@
 package com.cinquecento.filestorage.service;
 
-import com.cinquecento.filestorage.exception.FileEntityNotFoundException;
+import com.cinquecento.exception.FileEntityNotFoundException;
 import com.cinquecento.filestorage.model.FileEntity;
 import org.springframework.web.multipart.MultipartFile;
 
