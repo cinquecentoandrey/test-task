@@ -1,0 +1,6 @@
+jwt:
+  token:
+    secret: test-task
+    subject: details
+    expired: 120
+    issuer: me
