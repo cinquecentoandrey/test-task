@@ -1,0 +1,36 @@
+server:
+  port: 66
+
+spring:
+  application:
+    name: engine-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/test-task
+    username: postgres
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka/
+
+
+entity-error-code:
+  not-found: 404
+  not-created: 422
+  not-updated: 422
+  access-denied: 403
+  illegal-arg: 487
+
+jwt:
+  token:
+    secret: test-task
+    subject: details
+    expired: 120
+    issuer: me
