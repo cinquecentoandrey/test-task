@@ -1,14 +1,15 @@
-package com.cinquecento.filestorage.dto;
+package com.cinqucento.engineservicestarter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class FileEntityResponse {
+@NoArgsConstructor
+public class ProjectEntityResponse {
 
     private Integer errorCode;
     private String message;
     private String date;
-
 }
